@@ -2,10 +2,10 @@
 b=7
 a = 32.4 *(-8.6 - b)/       6.1E-8
 d = a ^ b // Esto es un comentario
+//Comentario solo
 c=6.5.3
 d1 = 16b
 dato0 =  3 --5
-
 dato1 = 3
 -b = 8
 g = //
@@ -19,3 +19,20 @@ d6=6.E-8
 b= a+3 4
 af= (x+2*y)
 af= (x+2*y
+
+_Var = 3 + b //Comentario234.+3
+F = 1       +      3+b
+H = 1+2 //Comentario
+j = 3*(a+b)
+j = 3*(-a+b)
+i = -3E3+
+
+1_Var = 4
+e = 2b+1
+H = 1+2 +/Comentario
+j = 3(a+b)
+j = 3*(+b)
+j = 3(a+b
+j = 3a+b)
+B 2 = 4*(2+a)
+B2 4*(2+a)

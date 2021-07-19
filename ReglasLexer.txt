@@ -1,0 +1,23 @@
+Reglas para el lexer
+
+En general
+
+No puede haber más de un operador de asignación (=)
+Todo lo que siga del // es un comentario hasta que acabe la línea
+
+En la variable
+
+Pueden haber n espacios antes y después de la variable pero ninguno dentro de ella
+Los caracteres permitidos son letras, números y guión bajo.
+Deben empezar con una letra
+Números reales (de punto flotante):
+Pueden ser positivos o negativos
+Pueden o no tener parte decimal pero deben contener un punto (ejemplo: 10. o 10.0)
+Pueden usar notación exponencial con la letra E, mayúscula o minúscula, pero después de la letra E sólo puede ir un entero positivo o negativo (ejemplo: 2.3E3,  6.345e-5,  -0.001E-3,  0.467E9).
+
+En la expresión
+
+Todos los espacios son ignorados
+No pueden haber dos operadores consecutivos (Los comentarios son la excepción, pues usan dos operadores de división)
+Cada paréntesis se debe cerrar
+Pueden haber n espacios entre números, paréntesis y operadores, pero no dentro del número. Ej: 43+   2 es permitido pero 4  3+2 no lo es
