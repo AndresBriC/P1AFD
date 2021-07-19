@@ -1,5 +1,7 @@
 //Ejemplos de prueba
 b=7
+ b=7
+b     =7
 a = 32.4 *(-8.6 - b)/       6.1E-8
 d = a ^ b // Esto es un comentario
 //Comentario solo
@@ -36,3 +38,13 @@ j = 3(a+b
 j = 3a+b)
 B 2 = 4*(2+a)
 B2 4*(2+a)
+AB /
+a= dato + 3
+a= dat o + 3
+AB = 3
+AB     = 3
+  A B = 3
+  A  B = 3
+AB //Comentario
+AB = 3 +      B
+AB = //RTYU
