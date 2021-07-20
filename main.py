@@ -61,12 +61,16 @@ def lexerAritmeticoBeginning(txt):
             begSpace = True
             if re.search("[a-zA-Z]", character) != None: #Si es una letra
                 varBegMark = index #Marca el inicio de la concatenacion
+                varEndMark = index
             else: #Si no es letra, manda error y deja de leer la string
                 tokenTable.append(['', character, 'Error, primer caracter diferente a una letra', counter])
         elif character != " " and begSpace == True:
             
-            if re.search("\w", character) != None: #Si es una letra
-                varEndMark = index #Marca el posible final de la concatenacion
+            if re.search("\w", character) != None: #Si es una letra, numero o _
+                if varBegMark == varEndMark:
+                    varEndMark = index
+                else:
+                    varEndMark = index #Marca el posible final de la concatenacion
             else: #Si no es letra, manda error y deja de leer la string
                 if character == '=': #Si no es letra, numero o _, pero es =, lo ignora
                     continue
@@ -92,6 +96,12 @@ def lexerAritmeticoEnd(txt):
     parentesisCierraCounter = 0
     numBegMark = 0 #Para concatenar los numeros
     numEndMark = 0
+    checkingNum = False
+    numType = ""
+    numHasPoint = False
+    checkingVar = False
+    varBegMark = 0
+    varEndMark = 0
     global tokenTable
     global counter
 
@@ -111,8 +121,57 @@ def lexerAritmeticoEnd(txt):
             elif character == ')':
                 parentesisCierraCounter += 1
             
-            if re.search("\d", character) != None:
+            #Analisis de numeros
+            if re.search("\d", character) != None and checkingNum == False: #Si el caracter es digito
+                checkingNum = True
                 numBegMark = index
+                numEndMark = index
+            elif re.search("\d", character) != None and checkingNum == True:
+                numEndMark = index
+            
+            #Check de punto
+            if index < len(txt)-1:             
+                if character == "." and checkingNum == True and numHasPoint == False: #Punto mientras encontramos un numero
+                    numEndMark = index
+                    numType = "Real"
+                    numHasPoint = True
+                elif character == "." and checkingNum == False:
+                    tokenTable.append(['', character, 'Error, punto sin indicar numero', counter])
+                    break
+                elif character == "." and checkingNum == True and numHasPoint == False:
+                    tokenTable.append(['', character, 'Error, dos puntos en un mismo número', counter])
+                    break
+"""             elif character == "." and checkingNum == True and re.search("\d|E", txt[index+1]) == None:
+                    tokenTable.append(['', character, 'Error, punto seguido de caracter inválido', counter])
+                    break """
+
+            #Check de exponente
+            if character == "E" and checkingNum == True: #Punto mientras encontramos un numero
+                numEndMark = index
+                numType = "Real"
+            elif character == "E" and checkingNum == False:
+                tokenTable.append(['', character, 'Error, ', counter])
+                break
+            
+            #Concatenacion numeros
+            if index < len(txt)-1 and checkingNum: #Si no estamos en el ultimo caracter
+                if re.search("\d", character) != None and re.search("\d|[.]|E", txt[index+1]) == None: #Si el caracter actual es digito y el siguiente no
+                    if numType == "Real":
+                        tokenTable.append(['', txt[numBegMark:numEndMark+1], 'Real', counter])
+                        numBegMark = 0
+                        numEndMark = 0
+                        numType = ''
+                        checkingNum = False
+                    elif numType == "Entero":
+                        tokenTable.append(['', txt[numBegMark:numEndMark+1], 'Entero', counter])
+                        numBegMark = 0
+                        numEndMark = 0
+                        numType = ''
+                        checkingNum = False
+
+            else: #Si estamos en el ultimo caracter
+                print("")
+
                 
 
         #Error falta cerrar parentesis
@@ -154,3 +213,13 @@ with open('tokenTable.csv', 'w', encoding='UTF8', newline='') as f:
     writer = csv.writer(f)
     writer.writerow(["Expresión","Token","Type","Index"])
     writer.writerows(tokenTable)
+
+
+"""
+To do
+Enteros
+Reales
+Negativos
+Not. Cient.
+Operadores incl. potencia
+"""
