@@ -1,3 +1,5 @@
+#19/07/21 Andrés Briseño A01352283, Gabriel Dichi A01027301, Python 3.8.6
+
 import re
 import csv
 
@@ -179,32 +181,52 @@ def lexerAritmeticoEnd(txt):
                 tokenTable.append(['',character, 'Cierra paréntesis', counter])
             
             #Analisis de variables
+            if re.search("[a-zA-Z]", character) != None and checkingVar == False and checkingNum == False: #Si es una letra
+                checkingVar = True
+                varBegMark = index #Marca el inicio de la concatenacion
+                varEndMark = index
+
+            if character == "_" and checkingVar == False:
+                tokenTable.append(['',character, 'Error, carácter de variable inválido', counter])
+
+            if re.search("\w", character) != None and checkingVar == False and checkingNum == False: #Si es una letra, numero o _
+                checkingVar == True
+                if varBegMark == varEndMark:
+                    varEndMark = index
+                elif character == "E" and numHasExp == True:
+                    continue
+                else:
+                    varEndMark = index #Marca el posible final de la concatenacion
+
 
 
             #Analisis de numeros
-            if index < len(txt)-1:
+            if index < len(txt)-1 and checkingVar == False:
                 if re.search("\d", character) != None and checkingNum == True and re.search("\d", txt[index+1]) == None and numType != "Real": #Si el caracter actual es numero pero el siguiente no
                     numType = "Entero"
-
-   
-            if re.search("\d", character) != None and checkingNum == False and numType != "Real" and isNegative == False: #Si el caracter es digito
-                numType = "Entero"
-                checkingNum = True
-                afterOp = False
-                numBegMark = index
-                numEndMark = index
-            elif re.search("\d", character) != None and checkingNum == True and numType != "Real":
-                numType = "Entero"
-                afterOp = False
-                numEndMark = index
-            elif re.search("\d", character) != None and checkingNum == False and numType == "Real" and isNegative == False: #Si el caracter es digito
-                checkingNum = True
-                afterOp = False
-                numBegMark = index
-                numEndMark = index
-            elif re.search("\d", character) != None and checkingNum == True and numType == "Real":
-                afterOp = False
-                numEndMark = index
+                if re.search("\d", character) != None and checkingNum == True and re.search("[a-zA-Z]", txt[index+1]) != None: #Si el caracter actual es numero pero el siguiente una letra
+                    if numHasExp == False and txt[index+1] != "E":
+                        tokenTable.append(['',txt[index+1], 'Error, variable no válida', counter])
+                        break
+            if checkingVar == False:
+                if re.search("\d", character) != None and checkingNum == False and numType != "Real" and isNegative == False: #Si el caracter es digito
+                    numType = "Entero"
+                    checkingNum = True
+                    afterOp = False
+                    numBegMark = index
+                    numEndMark = index
+                elif re.search("\d", character) != None and checkingNum == True and numType != "Real":
+                    numType = "Entero"
+                    afterOp = False
+                    numEndMark = index
+                elif re.search("\d", character) != None and checkingNum == False and numType == "Real" and isNegative == False: #Si el caracter es digito
+                    checkingNum = True
+                    afterOp = False
+                    numBegMark = index
+                    numEndMark = index
+                elif re.search("\d", character) != None and checkingNum == True and numType == "Real":
+                    afterOp = False
+                    numEndMark = index
             
             #Check de punto
             if index < len(txt)-1:             
@@ -266,6 +288,15 @@ def lexerAritmeticoEnd(txt):
                         numHasPoint = False
                         afterOp = False
                         isNegative = False
+            
+            #Concatenacion de variables
+            if index < len(txt)-1 and checkingVar: #Si no estamos en el ultimo caracter
+                if re.search("\w", character) != None and re.search("\w", txt[index+1]) == None: #Si el caracter actual es variable y el siguiente no
+                    tokenTable.append(['', txt[varBegMark:varEndMark+1], 'Variable', counter])
+                    varBegMark = 0
+                    varEndMark = 0
+                    checkingVar = False
+                    afterOp = False
 
             else: #Si estamos en el ultimo caracter
                 print("")
