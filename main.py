@@ -26,9 +26,6 @@ def stringSplitter(txt):
             print("Se econtró un segundo operador de asignación")
             end += character
             break
-    
-    """ if postEqual == False: #Si no se encontro un =
-        print("No hay operador de asignacion") """
 
     #Agrega ambas partes a una lista
     splitString.append(beginning)
@@ -42,7 +39,7 @@ def lexerAritmeticoBeginning(txt):
     varSpace = False #Checa si hay espacios dentro de la variable
     varBegMark = 0 #Para concatenar la variable
     varEndMark = 0 #Para concatenar la variable
-    varConcat = ""
+    varConcat = "" #Almacena la variable concatenada
     global tokenTable
     global counter
 
@@ -91,6 +88,10 @@ def lexerAritmeticoBeginning(txt):
 def lexerAritmeticoEnd(txt):
     opSpace = False #Checa si es un espacio despues de un operador
     afterOp = False #Nota si hubo un operador antes
+    parentesisAbreCounter = 0 #Para saber si se cierran todos lo parentesis
+    parentesisCierraCounter = 0
+    numBegMark = 0 #Para concatenar los numeros
+    numEndMark = 0
     global tokenTable
     global counter
 
@@ -100,6 +101,23 @@ def lexerAritmeticoEnd(txt):
     else: #Si el end no esta vacio
         for index, character in enumerate(txt): #Enumerate() se usa para poder tener el indice y el caracter
             counter += 1
+            
+            #Analisis de parentesis
+            if parentesisCierraCounter > parentesisAbreCounter:
+                tokenTable.append(['',')','Error de paréntesis, cierra pero no abre', counter])
+                break
+            if character == '(':
+                parentesisAbreCounter += 1
+            elif character == ')':
+                parentesisCierraCounter += 1
+            
+            if re.search("\d", character) != None:
+                numBegMark = index
+                
+
+        #Error falta cerrar parentesis
+        if parentesisAbreCounter > parentesisCierraCounter: #Falta cerrar
+            tokenTable.append(['','','Falta cerrar paréntesis', counter])
 
 
     print("Lexer end")
@@ -131,6 +149,7 @@ for line in testsFile:
 
 testsFile.close()
 
+#Escribe las listas al CSV
 with open('tokenTable.csv', 'w', encoding='UTF8', newline='') as f:
     writer = csv.writer(f)
     writer.writerow(["Expresión","Token","Type","Index"])

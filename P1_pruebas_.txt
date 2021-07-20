@@ -1,12 +1,15 @@
 //Ejemplos de prueba
 b=7
  b=7
+  b =7
 b     =7
+ b = 7
 a = 32.4 *(-8.6 - b)/       6.1E-8
 d = a ^ b // Esto es un comentario
 //Comentario solo
 c=6.5.3
 d1 = 16b
+d3 = b16
 dato0 =  3 --5
 dato1 = 3
 
@@ -64,3 +67,15 @@ Exp = -10.3E-2
 EXP = -10.3E-2
 EXP = -10..3E2
 EXP = --10.3E2
+P = (1+(b+1*(a+2*a)))
+P = ) (a+b)
+P = )(1
+P = )))(((1
+N = 1 - 1
+N = 1 - (-1)
+N = 1 -(-1)
+N = 1 --1
+D = 1.2
+D = 12.
+D = .12
+ b= 7
