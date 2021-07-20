@@ -99,9 +99,11 @@ def lexerAritmeticoEnd(txt):
     checkingNum = False
     numType = ""
     numHasPoint = False
+    numHasExp = False
     checkingVar = False
     varBegMark = 0
     varEndMark = 0
+    isNegative = False
     global tokenTable
     global counter
 
@@ -112,29 +114,96 @@ def lexerAritmeticoEnd(txt):
         for index, character in enumerate(txt): #Enumerate() se usa para poder tener el indice y el caracter
             counter += 1
             
+            #Analisis de asigacion
+            if character == "=":
+                tokenTable.append(['', '=','Error, más de un operador de asignación',counter])
+                break
+
+            #Analisis de comentarios
+            if index < len(txt)-1:
+                if character == "/" and txt[index+1] == "/": #Si detecta un comentario, deja de analizar el resto
+                    tokenTable.append(['', '//','Comentario',counter])
+                    break
+
+            #Analisis de siguiente del parentesis
+            if index < len(txt)-1:
+                if character == "(" and re.search("\d|[a-zA-Z]|[-]", txt[index+1]) == None:
+                    tokenTable.append(['', txt[index+1],'Error, Caracter inválido después de paréntesis',counter])
+                    break
+
+            #Analisis de espacios
+            if index < len(txt)-1:
+                if re.search("\s", character) != None and checkingNum == True and (txt[index+1] != "+" or txt[index+1] != "-" or txt[index+1] != "*" or txt[index+1] != "/" or chatxt[index+1] != "^"):
+                    tokenTable.append(['', txt[index+1],'Error, número separado por otro número',counter])
+                    break
+                elif re.search("\s", character) != None and checkingNum == True and re.search("\s", txt[index+1]) != None:
+                    continue
+
             #Analisis de operadores
-            if re.search("[+]|[-]|[*]|[/]|[^]", character) != None and afterOp == False:
-                afterOp = True
-                if character == '-':
-                    tokenTable.append(['',])
+            if index < len(txt)-1:
+                #No detiene reales negativos
+                if character == "-" and re.search("\d", txt[index+1]) != None and afterOp == False and checkingNum == False:
+                    checkingNum = True
+                    isNegative = True
+                    numBegMark = index
 
-
-
+                if (character == "+" or character == "-" or character == "*" or character == "/" or character == "^") and afterOp == False:
+                    afterOp = True
+                    if character == '+':
+                        tokenTable.append(['',character, 'Suma', counter])
+                    if character == '-' and numHasExp == False and checkingNum == False:
+                        tokenTable.append(['',character, 'Resta', counter])
+                    if character == '/':
+                        tokenTable.append(['',character, 'División', counter])
+                    if character == '*':
+                        tokenTable.append(['',character, 'Multiplicación', counter])
+                    if character == '^':
+                        tokenTable.append(['',character, 'Potencia', counter])
+                elif (character == "+" or character == "-" or character == "*" or character == "/" or character == "^") and afterOp == True:
+                    tokenTable.append(['',character, 'Error, operadores consecutivos', counter])
+                    break
+            if index == len(txt)-1 and (character == "+" or character == "-" or character == "*" or character == "/" or character == "^" or character == "E"):
+                tokenTable.append(['',character, 'Error, No se puede terminar con un operador', counter])
+                
             #Analisis de parentesis
             if parentesisCierraCounter > parentesisAbreCounter:
                 tokenTable.append(['',')','Error de paréntesis, cierra pero no abre', counter])
                 break
             if character == '(':
+                afterOp = False
                 parentesisAbreCounter += 1
+                tokenTable.append(['',character, 'Abre paréntesis', counter])
             elif character == ')':
+                afterOp = False
                 parentesisCierraCounter += 1
+                tokenTable.append(['',character, 'Cierra paréntesis', counter])
             
+            #Analisis de variables
+
+
             #Analisis de numeros
-            if re.search("\d", character) != None and checkingNum == False: #Si el caracter es digito
+            if index < len(txt)-1:
+                if re.search("\d", character) != None and checkingNum == True and re.search("\d", txt[index+1]) == None and numType != "Real": #Si el caracter actual es numero pero el siguiente no
+                    numType = "Entero"
+
+   
+            if re.search("\d", character) != None and checkingNum == False and numType != "Real" and isNegative == False: #Si el caracter es digito
+                numType = "Entero"
                 checkingNum = True
+                afterOp = False
                 numBegMark = index
                 numEndMark = index
-            elif re.search("\d", character) != None and checkingNum == True:
+            elif re.search("\d", character) != None and checkingNum == True and numType != "Real":
+                numType = "Entero"
+                afterOp = False
+                numEndMark = index
+            elif re.search("\d", character) != None and checkingNum == False and numType == "Real" and isNegative == False: #Si el caracter es digito
+                checkingNum = True
+                afterOp = False
+                numBegMark = index
+                numEndMark = index
+            elif re.search("\d", character) != None and checkingNum == True and numType == "Real":
+                afterOp = False
                 numEndMark = index
             
             #Check de punto
@@ -143,6 +212,7 @@ def lexerAritmeticoEnd(txt):
                     numEndMark = index
                     numType = "Real"
                     numHasPoint = True
+                    afterOp = False
                 elif character == "." and checkingNum == False:
                     tokenTable.append(['', character, 'Error, punto sin indicar numero', counter])
                     break
@@ -155,10 +225,15 @@ def lexerAritmeticoEnd(txt):
 
             #Check de exponente
             if index < len(txt)-1:
-                if character == "E" and checkingNum == True: #Exponencial mientras encontramos un numero
+                if character == "E" and checkingNum == True and numHasExp == False: #Exponencial mientras encontramos un numero
                     numEndMark = index
                     numType = "Real"
-                elif character == "." and checkingNum == False:
+                    numHasExp = True
+                    afterOp = False
+                elif character == "E" and checkingNum == True and numHasExp == True:
+                    tokenTable.append(['', character, 'Error, dos exponenciales en un número', counter])
+                    break
+                elif character == "E" and checkingNum == False:
                     tokenTable.append(['', character, 'Error, exponencial sin indicar numero', counter])
                     break
                 elif character == "E" and checkingNum == False and checkingVar == False:
@@ -178,13 +253,19 @@ def lexerAritmeticoEnd(txt):
                         numType = ''
                         checkingNum = False
                         numHasPoint = False
+                        numHasExp = False
+                        afterOp = False
+                        isNegative = False
                     elif numType == "Entero":
                         tokenTable.append(['', txt[numBegMark:numEndMark+1], 'Entero', counter])
                         numBegMark = 0
                         numEndMark = 0
                         numType = ''
                         checkingNum = False
+                        numHasExp = False
                         numHasPoint = False
+                        afterOp = False
+                        isNegative = False
 
             else: #Si estamos en el ultimo caracter
                 print("")
@@ -237,6 +318,5 @@ To do
 Enteros
 Reales
 Negativos
-Not. Cient.
 Operadores incl. potencia
 """
