@@ -38,7 +38,11 @@ def stringSplitter(txt):
 
 #Hace el desglose del string hasta el operador de asignacion
 def lexerAritmeticoBeginning(txt):
-    begSpace = False
+    begSpace = False #Checa si hay espacios antes de la variable
+    varSpace = False #Checa si hay espacios dentro de la variable
+    varBegMark = 0 #Para concatenar la variable
+    varEndMark = 0 #Para concatenar la variable
+    varConcat = ""
     global tokenTable
     global counter
 
@@ -59,23 +63,45 @@ def lexerAritmeticoBeginning(txt):
         elif character != " " and begSpace == False: #Aqui se encuentra algo despues de los espacios del principio, solo puede ser letra
             begSpace = True
             if re.search("[a-zA-Z]", character) != None: #Si es una letra
-                tokenTable.append(['', character, 'Variable', counter])
+                varBegMark = index #Marca el inicio de la concatenacion
             else: #Si no es letra, manda error y deja de leer la string
                 tokenTable.append(['', character, 'Error, primer caracter diferente a una letra', counter])
-        
+        elif character != " " and begSpace == True:
+            
+            if re.search("\w", character) != None: #Si es una letra
+                varEndMark = index #Marca el posible final de la concatenacion
+            else: #Si no es letra, manda error y deja de leer la string
+                if character == '=': #Si no es letra, numero o _, pero es =, lo ignora
+                    continue
+                else:
+                    tokenTable.append(['', character, 'Error, caracter no valido para variable', counter])
+
+        #Checa espacios
         if index != len(txt)-1: #Para caracteres antes del ultimo
             if character == " " and begSpace == True and (txt[index+1] == " " or txt[index+1] == "="): #Si el actual es espacio y el sig. es espacio o igual
                 continue
-            elif character == " " and begSpace == True and (txt[index+1] != " " or txt[index+1] != "="):
+            elif character == " " and begSpace == True and varSpace == False and (txt[index+1] != " " or txt[index+1] != "="):
                 tokenTable.append(['', character, 'Error, espacio dentro de la variable o variable sin asignación', counter])
+                varSpace = True
+    
+    varConcat = txt[varBegMark:varEndMark+1] #Hace el subtring de la variable sola (sin espacios)
+    tokenTable.append(['', varConcat, 'Variable', counter])
 
 
 def lexerAritmeticoEnd(txt):
-    #Aqui pondria mi lexer para la expresion... SI TUVIERA UNO
     opSpace = False #Checa si es un espacio despues de un operador
+    afterOp = False #Nota si hubo un operador antes
+    global tokenTable
+    global counter
 
     if len(txt) == 0: #Si le pasan "end" vacio
+        tokenTable.append(['','','Error, no hay operador de asignacion', counter])
         print("No hay operador de asignacion")
+    else: #Si el end no esta vacio
+        for index, character in enumerate(txt): #Enumerate() se usa para poder tener el indice y el caracter
+            counter += 1
+
+
     print("Lexer end")
 
 #Abre el texto con los casos de prueba

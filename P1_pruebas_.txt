@@ -9,6 +9,7 @@ c=6.5.3
 d1 = 16b
 dato0 =  3 --5
 dato1 = 3
+
 -b = 8
 g = //
 h = 8.-3
@@ -48,3 +49,18 @@ AB     = 3
 AB //Comentario
 AB = 3 +      B
 AB = //RTYU
+AB = 3 + 4 * a + 1 - b
+AB  3 + 4 * a + 1 - b
+A = 3 * _AB
+A = 3 * +AB
+A = 3 *    68
+A = 3 * (68+1)
+B_1 = 3
+B{1 = 3
+B$#@ = 3
+   AB    = 4
+EXP = -10.3E2
+Exp = -10.3E-2
+EXP = -10.3E-2
+EXP = -10..3E2
+EXP = --10.3E2
