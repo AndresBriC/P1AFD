@@ -112,6 +112,14 @@ def lexerAritmeticoEnd(txt):
         for index, character in enumerate(txt): #Enumerate() se usa para poder tener el indice y el caracter
             counter += 1
             
+            #Analisis de operadores
+            if re.search("[+]|[-]|[*]|[/]|[^]", character) != None and afterOp == False:
+                afterOp = True
+                if character == '-':
+                    tokenTable.append(['',])
+
+
+
             #Analisis de parentesis
             if parentesisCierraCounter > parentesisAbreCounter:
                 tokenTable.append(['',')','Error de paréntesis, cierra pero no abre', counter])
@@ -138,36 +146,45 @@ def lexerAritmeticoEnd(txt):
                 elif character == "." and checkingNum == False:
                     tokenTable.append(['', character, 'Error, punto sin indicar numero', counter])
                     break
-                elif character == "." and checkingNum == True and numHasPoint == False:
+                elif character == "." and checkingNum == True and numHasPoint == True:
                     tokenTable.append(['', character, 'Error, dos puntos en un mismo número', counter])
                     break
-"""             elif character == "." and checkingNum == True and re.search("\d|E", txt[index+1]) == None:
+                elif character == "." and checkingNum == True and re.search("\d|E", txt[index+1]) == None:
                     tokenTable.append(['', character, 'Error, punto seguido de caracter inválido', counter])
-                    break """
+                    break
 
             #Check de exponente
-            if character == "E" and checkingNum == True: #Punto mientras encontramos un numero
-                numEndMark = index
-                numType = "Real"
-            elif character == "E" and checkingNum == False:
-                tokenTable.append(['', character, 'Error, ', counter])
-                break
+            if index < len(txt)-1:
+                if character == "E" and checkingNum == True: #Exponencial mientras encontramos un numero
+                    numEndMark = index
+                    numType = "Real"
+                elif character == "." and checkingNum == False:
+                    tokenTable.append(['', character, 'Error, exponencial sin indicar numero', counter])
+                    break
+                elif character == "E" and checkingNum == False and checkingVar == False:
+                    tokenTable.append(['', character, 'Error, E en posición inválida', counter])
+                    break
+                elif character == "E" and checkingNum == True and re.search("\d|E|[-]", txt[index+1]) == None:
+                    tokenTable.append(['', character, 'Error, exponente seguido de caracter inválido', counter])
+                    break
             
             #Concatenacion numeros
             if index < len(txt)-1 and checkingNum: #Si no estamos en el ultimo caracter
-                if re.search("\d", character) != None and re.search("\d|[.]|E", txt[index+1]) == None: #Si el caracter actual es digito y el siguiente no
+                if re.search("\d|[.]", character) != None and re.search("\d|[.]|E", txt[index+1]) == None: #Si el caracter actual es digito y el siguiente no
                     if numType == "Real":
                         tokenTable.append(['', txt[numBegMark:numEndMark+1], 'Real', counter])
                         numBegMark = 0
                         numEndMark = 0
                         numType = ''
                         checkingNum = False
+                        numHasPoint = False
                     elif numType == "Entero":
                         tokenTable.append(['', txt[numBegMark:numEndMark+1], 'Entero', counter])
                         numBegMark = 0
                         numEndMark = 0
                         numType = ''
                         checkingNum = False
+                        numHasPoint = False
 
             else: #Si estamos en el ultimo caracter
                 print("")

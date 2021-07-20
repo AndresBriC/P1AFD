@@ -35,7 +35,7 @@ Expresión,Token,Type,Index
 ",,,68
 ,=,Asignación,71
 ,d,Variable,71
-,E,"Error, ",82
+,E,"Error, E en posición inválida",82
 "//Comentario solo
 ",,,82
 ,//,Comentario,83
@@ -45,349 +45,360 @@ Expresión,Token,Type,Index
 ",,,83
 ,=,Asignación,85
 ,c,Variable,85
-,6.5.3,Real,90
+,.,"Error, dos puntos en un mismo número",89
 "d1 = 16b
-",,,91
-,=,Asignación,95
-,d1,Variable,95
+",,,89
+,=,Asignación,93
+,d1,Variable,93
 "d3 = b16
-",,,100
-,=,Asignación,104
-,d3,Variable,104
+",,,98
+,=,Asignación,102
+,d3,Variable,102
 "dato0 =  3 --5
-",,,109
-,=,Asignación,116
-,dato0,Variable,116
+",,,107
+,=,Asignación,114
+,dato0,Variable,114
 "dato1 = 3
-",,,124
-,=,Asignación,131
-,dato1,Variable,131
+",,,122
+,=,Asignación,129
+,dato1,Variable,129
 "
-",,,134
+",,,132
 ,"
-","Error, primer caracter diferente a una letra",135
+","Error, primer caracter diferente a una letra",133
 ,"
-",Variable,135
-,,"Error, no hay operador de asignacion",135
+",Variable,133
+,,"Error, no hay operador de asignacion",133
 "-b = 8
-",,,135
-,-,"Error, primer caracter diferente a una letra",136
-,=,Asignación,139
-,-b,Variable,139
+",,,133
+,-,"Error, primer caracter diferente a una letra",134
+,=,Asignación,137
+,-b,Variable,137
 "g = //
-",,,142
-,=,Asignación,145
-,g,Variable,145
+",,,140
+,=,Asignación,143
+,g,Variable,143
 "h = 8.-3
-",,,149
-,=,Asignación,152
-,h,Variable,152
-,8.-3,Real,157
+",,,147
+,=,Asignación,150
+,h,Variable,150
+,8.,Real,153
 "d2 = -3e-4f
-",,,158
-,=,Asignación,162
-,d2,Variable,162
-d3 ==,,,170
-,=,Asignación,174
-,d3,Variable,174
+",,,156
+,=,Asignación,160
+,d2,Variable,160
+d3 ==,,,168
+,=,Asignación,172
+,d3,Variable,172
 "d4 = 45(*38)^3
-",,,175
-,=,Asignación,179
-,d4,Variable,179
+",,,173
+,=,Asignación,177
+,d4,Variable,177
 "d5___3=6E-8
-",,,190
-,=,Asignación,197
-,d5___3,Variable,197
-,6E-8,Real,201
+",,,188
+,=,Asignación,195
+,d5___3,Variable,195
+,6E-8,Real,199
 "d6=6.E-8
-",,,202
-,=,Asignación,205
-,d6,Variable,205
-,6.E-8,Real,210
+",,,200
+,=,Asignación,203
+,d6,Variable,203
+,6.E-8,Real,208
 "1b = 3
-",,,211
-,1,"Error, primer caracter diferente a una letra",212
-,=,Asignación,215
-,1b,Variable,215
+",,,209
+,1,"Error, primer caracter diferente a una letra",210
+,=,Asignación,213
+,1b,Variable,213
 "b= a+3 4
-",,,218
-,=,Asignación,220
-,b,Variable,220
+",,,216
+,=,Asignación,218
+,b,Variable,218
 "af= (x+2*y)
-",,,227
-,=,Asignación,230
-,af,Variable,230
+",,,225
+,=,Asignación,228
+,af,Variable,228
 "af= (x+2*y
-",,,239
-,=,Asignación,242
-,af,Variable,242
-,,Falta cerrar paréntesis,250
+",,,237
+,=,Asignación,240
+,af,Variable,240
+,,Falta cerrar paréntesis,248
 "
-",,,250
+",,,248
 ,"
-","Error, primer caracter diferente a una letra",251
+","Error, primer caracter diferente a una letra",249
 ,"
-",Variable,251
-,,"Error, no hay operador de asignacion",251
+",Variable,249
+,,"Error, no hay operador de asignacion",249
 "_Var = 3 + b //Comentario234.+3
-",,,251
-,_,"Error, primer caracter diferente a una letra",252
-,=,Asignación,257
-,_Var,Variable,257
-,3 + b //Comentario234.+3,Real,282
+",,,249
+,_,"Error, primer caracter diferente a una letra",250
+,=,Asignación,255
+,_Var,Variable,255
+,3 + b //Comentario234.,Real,278
 "F = 1       +      3+b
-",,,283
-,=,Asignación,286
-,F,Variable,286
+",,,281
+,=,Asignación,284
+,F,Variable,284
 "H = 1+2 //Comentario
-",,,306
-,=,Asignación,309
-,H,Variable,309
+",,,304
+,=,Asignación,307
+,H,Variable,307
 "j = 3*(a+b)
-",,,327
-,=,Asignación,330
-,j,Variable,330
+",,,325
+,=,Asignación,328
+,j,Variable,328
 "j = 3*(-a+b)
-",,,339
-,=,Asignación,342
-,j,Variable,342
+",,,337
+,=,Asignación,340
+,j,Variable,340
 "i = -3E3+
-",,,352
-,=,Asignación,355
-,i,Variable,355
-,3E3,Real,360
+",,,350
+,=,Asignación,353
+,i,Variable,353
+,3E3,Real,358
 "
-",,,362
+",,,360
 ,"
-","Error, primer caracter diferente a una letra",363
+","Error, primer caracter diferente a una letra",361
 ,"
-",Variable,363
-,,"Error, no hay operador de asignacion",363
+",Variable,361
+,,"Error, no hay operador de asignacion",361
 "1_Var = 4
-",,,363
-,1,"Error, primer caracter diferente a una letra",364
-,=,Asignación,370
-,1_Var,Variable,370
+",,,361
+,1,"Error, primer caracter diferente a una letra",362
+,=,Asignación,368
+,1_Var,Variable,368
 "e = 2b+1
-",,,373
-,=,Asignación,376
-,e,Variable,376
+",,,371
+,=,Asignación,374
+,e,Variable,374
 "H = 1+2 +/Comentario
-",,,382
-,=,Asignación,385
-,H,Variable,385
+",,,380
+,=,Asignación,383
+,H,Variable,383
 "j = 3(a+b)
-",,,403
-,=,Asignación,406
-,j,Variable,406
+",,,401
+,=,Asignación,404
+,j,Variable,404
 "j = 3*(+b)
-",,,414
-,=,Asignación,417
-,j,Variable,417
+",,,412
+,=,Asignación,415
+,j,Variable,415
 "j = 3(a+b
-",,,425
-,=,Asignación,428
-,j,Variable,428
-,,Falta cerrar paréntesis,435
+",,,423
+,=,Asignación,426
+,j,Variable,426
+,,Falta cerrar paréntesis,433
 "j = 3a+b)
-",,,435
-,=,Asignación,438
-,j,Variable,438
-,),"Error de paréntesis, cierra pero no abre",445
+",,,433
+,=,Asignación,436
+,j,Variable,436
+,),"Error de paréntesis, cierra pero no abre",443
 "B 2 = 4*(2+a)
-",,,445
-, ,"Error, espacio dentro de la variable o variable sin asignación",447
-,=,Asignación,450
-,B 2,Variable,450
+",,,443
+, ,"Error, espacio dentro de la variable o variable sin asignación",445
+,=,Asignación,448
+,B 2,Variable,448
 "B2 4*(2+a)
-",,,459
-, ,"Error, espacio dentro de la variable o variable sin asignación",462
-,*,"Error, caracter no valido para variable",464
-,(,"Error, caracter no valido para variable",465
-,+,"Error, caracter no valido para variable",467
-,),"Error, caracter no valido para variable",469
+",,,457
+, ,"Error, espacio dentro de la variable o variable sin asignación",460
+,*,"Error, caracter no valido para variable",462
+,(,"Error, caracter no valido para variable",463
+,+,"Error, caracter no valido para variable",465
+,),"Error, caracter no valido para variable",467
 ,"
-","Error, caracter no valido para variable",470
-,B2 4*(2+a,Variable,470
-,,"Error, no hay operador de asignacion",470
+","Error, caracter no valido para variable",468
+,B2 4*(2+a,Variable,468
+,,"Error, no hay operador de asignacion",468
 "AB /
-",,,470
-, ,"Error, espacio dentro de la variable o variable sin asignación",473
-,/,"Error, caracter no valido para variable",474
+",,,468
+, ,"Error, espacio dentro de la variable o variable sin asignación",471
+,/,"Error, caracter no valido para variable",472
 ,"
-","Error, caracter no valido para variable",475
-,AB,Variable,475
-,,"Error, no hay operador de asignacion",475
+","Error, caracter no valido para variable",473
+,AB,Variable,473
+,,"Error, no hay operador de asignacion",473
 "a= dato + 3
-",,,475
-,=,Asignación,477
-,a,Variable,477
+",,,473
+,=,Asignación,475
+,a,Variable,475
 "a= dat o + 3
-",,,487
-,=,Asignación,489
-,a,Variable,489
+",,,485
+,=,Asignación,487
+,a,Variable,487
 "AB = 3
-",,,500
-,=,Asignación,504
-,AB,Variable,504
+",,,498
+,=,Asignación,502
+,AB,Variable,502
 "AB     = 3
-",,,507
-,=,Asignación,515
-,AB,Variable,515
+",,,505
+,=,Asignación,513
+,AB,Variable,513
 "  A B = 3
-",,,518
-, ,"Error, espacio dentro de la variable o variable sin asignación",522
-,=,Asignación,525
-,A B,Variable,525
+",,,516
+, ,"Error, espacio dentro de la variable o variable sin asignación",520
+,=,Asignación,523
+,A B,Variable,523
 "  A  B = 3
-",,,528
-, ,"Error, espacio dentro de la variable o variable sin asignación",533
-,=,Asignación,536
-,A  B,Variable,536
+",,,526
+, ,"Error, espacio dentro de la variable o variable sin asignación",531
+,=,Asignación,534
+,A  B,Variable,534
 "AB //Comentario
-",,,539
-, ,"Error, espacio dentro de la variable o variable sin asignación",542
-,//,Comentario,543
-,AB,Variable,543
-,,"Error, no hay operador de asignacion",543
+",,,537
+, ,"Error, espacio dentro de la variable o variable sin asignación",540
+,//,Comentario,541
+,AB,Variable,541
+,,"Error, no hay operador de asignacion",541
 "AB = 3 +      B
-",,,543
-,=,Asignación,547
-,AB,Variable,547
+",,,541
+,=,Asignación,545
+,AB,Variable,545
 "AB = //RTYU
-",,,559
-,=,Asignación,563
-,AB,Variable,563
+",,,557
+,=,Asignación,561
+,AB,Variable,561
 "AB = 3 + 4 * a + 1 - b
-",,,571
-,=,Asignación,575
-,AB,Variable,575
+",,,569
+,=,Asignación,573
+,AB,Variable,573
 "AB  3 + 4 * a + 1 - b
-",,,594
-, ,"Error, espacio dentro de la variable o variable sin asignación",598
-,+,"Error, caracter no valido para variable",601
-,*,"Error, caracter no valido para variable",605
-,+,"Error, caracter no valido para variable",609
-,-,"Error, caracter no valido para variable",613
+",,,592
+, ,"Error, espacio dentro de la variable o variable sin asignación",596
+,+,"Error, caracter no valido para variable",599
+,*,"Error, caracter no valido para variable",603
+,+,"Error, caracter no valido para variable",607
+,-,"Error, caracter no valido para variable",611
 ,"
-","Error, caracter no valido para variable",616
-,AB  3 + 4 * a + 1 - b,Variable,616
-,,"Error, no hay operador de asignacion",616
+","Error, caracter no valido para variable",614
+,AB  3 + 4 * a + 1 - b,Variable,614
+,,"Error, no hay operador de asignacion",614
 "A = 3 * _AB
-",,,616
-,=,Asignación,619
-,A,Variable,619
+",,,614
+,=,Asignación,617
+,A,Variable,617
 "A = 3 * +AB
-",,,628
-,=,Asignación,631
-,A,Variable,631
+",,,626
+,=,Asignación,629
+,A,Variable,629
 "A = 3 *    68
-",,,640
-,=,Asignación,643
-,A,Variable,643
+",,,638
+,=,Asignación,641
+,A,Variable,641
 "A = 3 * (68+1)
-",,,654
-,=,Asignación,657
-,A,Variable,657
+",,,652
+,=,Asignación,655
+,A,Variable,655
 "B_1 = 3
-",,,669
-,=,Asignación,674
-,B_1,Variable,674
+",,,667
+,=,Asignación,672
+,B_1,Variable,672
 "B{1 = 3
-",,,677
-,{,"Error, caracter no valido para variable",679
-,=,Asignación,682
-,B{1,Variable,682
+",,,675
+,{,"Error, caracter no valido para variable",677
+,=,Asignación,680
+,B{1,Variable,680
 "B$#@ = 3
-",,,685
-,$,"Error, caracter no valido para variable",687
-,#,"Error, caracter no valido para variable",688
-,@,"Error, caracter no valido para variable",689
-,=,Asignación,691
-,B,Variable,691
+",,,683
+,$,"Error, caracter no valido para variable",685
+,#,"Error, caracter no valido para variable",686
+,@,"Error, caracter no valido para variable",687
+,=,Asignación,689
+,B,Variable,689
 "   AB    = 4
-",,,694
-,=,Asignación,704
-,AB,Variable,704
+",,,692
+,=,Asignación,702
+,AB,Variable,702
 "EXP = -10.3E2
-",,,707
-,=,Asignación,712
-,EXP,Variable,712
-,10.3E2,Real,720
+",,,705
+,=,Asignación,710
+,EXP,Variable,710
+,10.3E2,Real,718
 "Exp = -10.3E-2
-",,,721
-,=,Asignación,726
-,Exp,Variable,726
-,10.3E-2,Real,735
+",,,719
+,=,Asignación,724
+,Exp,Variable,724
+,10.3E-2,Real,733
+"Exp = -10.3E-1
+",,,734
+,=,Asignación,739
+,Exp,Variable,739
+,10.3E-1,Real,748
+"Exp = -10.3E-3
+",,,749
+,=,Asignación,754
+,Exp,Variable,754
+,10.3E-3,Real,763
 "EXP = -10.3E-2
-",,,736
-,=,Asignación,741
-,EXP,Variable,741
-,10.3E-2,Real,750
+",,,764
+,=,Asignación,769
+,EXP,Variable,769
+,10.3E-2,Real,778
 "EXP = -10..3E2
-",,,751
-,=,Asignación,756
-,EXP,Variable,756
-,10..3E2,Real,765
-"EXP = --10.3E2
-",,,766
-,=,Asignación,771
-,EXP,Variable,771
-,10.3E2,Real,780
-"P = (1+(b+1*(a+2*a)))
-",,,781
+",,,779
 ,=,Asignación,784
-,P,Variable,784
+,EXP,Variable,784
+,.,"Error, dos puntos en un mismo número",790
+"EXP = --10.3E2
+",,,790
+,=,Asignación,795
+,EXP,Variable,795
+,10.3E2,Real,804
+"P = (1+(b+1*(a+2*a)))
+",,,805
+,=,Asignación,808
+,P,Variable,808
 "P = ) (a+b)
-",,,803
-,=,Asignación,806
-,P,Variable,806
-,),"Error de paréntesis, cierra pero no abre",809
+",,,827
+,=,Asignación,830
+,P,Variable,830
+,),"Error de paréntesis, cierra pero no abre",833
 "P = )(1
-",,,809
-,=,Asignación,812
-,P,Variable,812
-,),"Error de paréntesis, cierra pero no abre",815
+",,,833
+,=,Asignación,836
+,P,Variable,836
+,),"Error de paréntesis, cierra pero no abre",839
 "P = )))(((1
-",,,815
-,=,Asignación,818
-,P,Variable,818
-,),"Error de paréntesis, cierra pero no abre",821
+",,,839
+,=,Asignación,842
+,P,Variable,842
+,),"Error de paréntesis, cierra pero no abre",845
 "N = 1 - 1
-",,,821
-,=,Asignación,824
-,N,Variable,824
+",,,845
+,=,Asignación,848
+,N,Variable,848
 "N = 1 - (-1)
-",,,831
-,=,Asignación,834
-,N,Variable,834
+",,,855
+,=,Asignación,858
+,N,Variable,858
 "N = 1 -(-1)
-",,,844
-,=,Asignación,847
-,N,Variable,847
+",,,868
+,=,Asignación,871
+,N,Variable,871
 "N = 1 --1
-",,,856
-,=,Asignación,859
-,N,Variable,859
+",,,880
+,=,Asignación,883
+,N,Variable,883
 "D = 1.2
-",,,866
-,=,Asignación,869
-,D,Variable,869
-,1.2,Real,873
+",,,890
+,=,Asignación,893
+,D,Variable,893
+,1.2,Real,897
 "D = 12.
-",,,874
-,=,Asignación,877
-,D,Variable,877
+",,,898
+,=,Asignación,901
+,D,Variable,901
+,12.,Real,905
 "D = .12
-",,,882
-,=,Asignación,885
-,D,Variable,885
-,.,"Error, punto sin indicar numero",887
+",,,906
+,=,Asignación,909
+,D,Variable,909
+,.,"Error, punto sin indicar numero",911
 " b= 7
-",,,887
-,=,Asignación,890
-,b,Variable,890
-P = . + 1,,,893
-,=,Asignación,896
-,P,Variable,896
-,.,"Error, punto sin indicar numero",898
+",,,911
+,=,Asignación,914
+,b,Variable,914
+P = . + 1,,,917
+,=,Asignación,920
+,P,Variable,920
+,.,"Error, punto sin indicar numero",922

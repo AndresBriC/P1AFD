@@ -19,7 +19,7 @@ Deben empezar con una letra
 En la expresión
 
 No pueden haber dos operadores consecutivos (Los comentarios son la excepción, pues usan dos operadores de división //)
-Después de un operador solo puede haber letra, numero o paréntesis
+Después de un operador solo puede haber letra, numero, paréntesis o n espacios
 Cada paréntesis se debe cerrar
 Pueden haber n espacios entre números, paréntesis y operadores, pero no dentro del número. Ej: 43+   2 es permitido pero 4  3+2 no lo es
 Números reales (de punto flotante):
