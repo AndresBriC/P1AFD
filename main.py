@@ -89,7 +89,7 @@ def lexerAritmeticoBeginning(txt):
             else: #Si no es letra, manda error y deja de leer la string
                 tokenTable.append(['', character, 'Error, primer caracter diferente a una letra', counter])
                 tok += '<div>'
-                tok+='<p class = "Error">' + character + "</p>"
+                tok+='<p class = "Error">' + txt[index:index+2] + "</p>"
                 tok += '</div>'
                 hasError = True
                 break
@@ -173,7 +173,7 @@ def lexerAritmeticoEnd(txt):
                 if character == "(" and re.search("\d|[a-zA-Z]|[-]", txt[index+1]) == None:
                     tokenTable.append(['', txt[index+1],'Error, Caracter inválido después de paréntesis',counter])
                     tok += '<div>'
-                    tok+='<p class = "Error">' + txt[index+1] + "</p>"
+                    tok+='<p class = "Error">' + txt[index:index+2] + "</p>"
                     tok += '</div>'
                     break
 
@@ -327,7 +327,7 @@ def lexerAritmeticoEnd(txt):
                 elif character == "." and checkingNum == True and numHasPoint == True:
                     tokenTable.append(['', character, 'Error, dos puntos en un mismo número', counter])
                     tok += '<div>'
-                    tok+='<p class = "Error">' + character + "</p>"
+                    tok+='<p class = "Error">' + txt[0:index+1] + "</p>"
                     tok += '</div>'
                     break
                 elif character == "." and checkingNum == True and re.search("\d|E", txt[index+1]) == None:
