@@ -3,7 +3,9 @@
 import re
 import csv
 import html
+import time
 
+startTime = time.time()
 tokenTable = [] #Contiene la tabla con los caracteres y tipos
 tok = ""
 counter = 0
@@ -466,3 +468,7 @@ with open('tokenTable.csv', 'w', encoding='UTF8', newline='') as f:
 f = open('colores.html','w') # w if you want to write override or a if you want to write and append
 f.write(tok)
 f.close()  
+
+#Muestra tiempo de ejecucion
+endTime = time.time()
+print(endTime - startTime, " segundos")
