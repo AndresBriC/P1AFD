@@ -113,6 +113,9 @@ def lexerAritmeticoBeginning(txt):
                 else:
                     tokenTable.append(['', character, 'Error, caracter no valido para variable', counter])
                     tok += '<div>'
+                    tok+='<p class = "variable">' + txt[0:index] + "</p>"
+                    tok += '</div>'
+                    tok += '<div>'
                     tok+='<p class = "Error">' + character + "</p>"
                     tok += '</div>'
                     hasError = True
@@ -129,12 +132,12 @@ def lexerAritmeticoEnd(txt):
     parentesisCierraCounter = 0
     numBegMark = 0 #Para concatenar los numeros
     numEndMark = 0
-    checkingNum = False
-    numType = ""
+    checkingNum = False #Para saber si se esta analizando un numero
+    numType = "" #Identifica Real o Entero
     numHasPoint = False
     numHasExp = False
-    checkingVar = False
-    varBegMark = 0
+    checkingVar = False #Para saber si se esta analizando una variable
+    varBegMark = 0 #Para concatenar variables
     varEndMark = 0
     isNegative = False
     global tokenTable
@@ -151,6 +154,9 @@ def lexerAritmeticoEnd(txt):
             #Analisis de asigacion
             if character == "=":
                 tokenTable.append(['', '=','Error, más de un operador de asignación',counter])
+                tok += '<div>'
+                tok+='<p class = "Error">' + '=' + "</p>"
+                tok += '</div>'
                 break
 
             #Analisis de comentarios
@@ -166,12 +172,18 @@ def lexerAritmeticoEnd(txt):
             if index < len(txt)-1:
                 if character == "(" and re.search("\d|[a-zA-Z]|[-]", txt[index+1]) == None:
                     tokenTable.append(['', txt[index+1],'Error, Caracter inválido después de paréntesis',counter])
+                    tok += '<div>'
+                    tok+='<p class = "Error">' + txt[index+1] + "</p>"
+                    tok += '</div>'
                     break
 
             #Analisis de espacios
             if index < len(txt)-1:
                 if re.search("\s", character) != None and checkingNum == True and (txt[index+1] != "+" or txt[index+1] != "-" or txt[index+1] != "*" or txt[index+1] != "/" or chatxt[index+1] != "^"):
                     tokenTable.append(['', txt[index+1],'Error, número separado por otro número',counter])
+                    tok += '<div>'
+                    tok+='<p class = "Error">' + txt[index+1] + "</p>"
+                    tok += '</div>'
                     break
                 elif re.search("\s", character) != None and checkingNum == True and re.search("\s", txt[index+1]) != None:
                     continue
@@ -213,13 +225,22 @@ def lexerAritmeticoEnd(txt):
                         tok += '</div>'
                 elif (character == "+" or character == "-" or character == "*" or character == "/" or character == "^") and afterOp == True:
                     tokenTable.append(['',character, 'Error, operadores consecutivos', counter])
+                    tok += '<div>'
+                    tok+='<p class = "Error">' + character + "</p>"
+                    tok += '</div>'
                     break
             if index == len(txt)-1 and (character == "+" or character == "-" or character == "*" or character == "/" or character == "^" or character == "E"):
                 tokenTable.append(['',character, 'Error, No se puede terminar con un operador', counter])
+                tok += '<div>'
+                tok+='<p class = "Error">' + character + "</p>"
+                tok += '</div>'
                 
             #Analisis de parentesis
             if parentesisCierraCounter > parentesisAbreCounter:
                 tokenTable.append(['',')','Error de paréntesis, cierra pero no abre', counter])
+                tok += '<div>'
+                tok+='<p class = "Error">' + ')' + "</p>"
+                tok += '</div>'
                 break
             if character == '(':
                 afterOp = False
@@ -244,6 +265,9 @@ def lexerAritmeticoEnd(txt):
 
             if character == "_" and checkingVar == False:
                 tokenTable.append(['',character, 'Error, carácter de variable inválido', counter])
+                tok += '<div>'
+                tok+='<p class = "Error">' + character + "</p>"
+                tok += '</div>'
 
             if re.search("\w", character) != None and checkingVar == False and checkingNum == False: #Si es una letra, numero o _
                 checkingVar == True
@@ -263,6 +287,9 @@ def lexerAritmeticoEnd(txt):
                 if re.search("\d", character) != None and checkingNum == True and re.search("[a-zA-Z]", txt[index+1]) != None: #Si el caracter actual es numero pero el siguiente una letra
                     if numHasExp == False and txt[index+1] != "E":
                         tokenTable.append(['',txt[index+1], 'Error, variable no válida', counter])
+                        tok += '<div>'
+                        tok+='<p class = "Error">' + txt[numBegMark:index+2] + "</p>"
+                        tok += '</div>'
                         break
             if checkingVar == False:
                 if re.search("\d", character) != None and checkingNum == False and numType != "Real" and isNegative == False: #Si el caracter es digito
@@ -293,12 +320,21 @@ def lexerAritmeticoEnd(txt):
                     afterOp = False
                 elif character == "." and checkingNum == False:
                     tokenTable.append(['', character, 'Error, punto sin indicar numero', counter])
+                    tok += '<div>'
+                    tok+='<p class = "Error">' + character + "</p>"
+                    tok += '</div>'
                     break
                 elif character == "." and checkingNum == True and numHasPoint == True:
                     tokenTable.append(['', character, 'Error, dos puntos en un mismo número', counter])
+                    tok += '<div>'
+                    tok+='<p class = "Error">' + character + "</p>"
+                    tok += '</div>'
                     break
                 elif character == "." and checkingNum == True and re.search("\d|E", txt[index+1]) == None:
                     tokenTable.append(['', character, 'Error, punto seguido de caracter inválido', counter])
+                    tok += '<div>'
+                    tok+='<p class = "Error">' + character + "</p>"
+                    tok += '</div>'
                     break
 
             #Check de exponente
@@ -310,15 +346,27 @@ def lexerAritmeticoEnd(txt):
                     afterOp = False
                 elif character == "E" and checkingNum == True and numHasExp == True:
                     tokenTable.append(['', character, 'Error, dos exponenciales en un número', counter])
+                    tok += '<div>'
+                    tok+='<p class = "Error">' + character + "</p>"
+                    tok += '</div>'
                     break
                 elif character == "E" and checkingNum == False:
                     tokenTable.append(['', character, 'Error, exponencial sin indicar numero', counter])
+                    tok += '<div>'
+                    tok+='<p class = "Error">' + character + "</p>"
+                    tok += '</div>'
                     break
                 elif character == "E" and checkingNum == False and checkingVar == False:
                     tokenTable.append(['', character, 'Error, E en posición inválida', counter])
+                    tok += '<div>'
+                    tok+='<p class = "Error">' + character + "</p>"
+                    tok += '</div>'
                     break
                 elif character == "E" and checkingNum == True and re.search("\d|E|[-]", txt[index+1]) == None:
                     tokenTable.append(['', character, 'Error, exponente seguido de caracter inválido', counter])
+                    tok += '<div>'
+                    tok+='<p class = "Error">' + character + "</p>"
+                    tok += '</div>'
                     break
             
             #Concatenacion numeros
@@ -371,6 +419,9 @@ def lexerAritmeticoEnd(txt):
         #Error falta cerrar parentesis
         if parentesisAbreCounter > parentesisCierraCounter: #Falta cerrar
             tokenTable.append(['','','Falta cerrar paréntesis', counter])
+            tok += '<div>'
+            tok+='<p class = "Error">' + 'Falta cerrar paréntesis' + "</p>"
+            tok += '</div>'
 
     print("Lexer end")
 
