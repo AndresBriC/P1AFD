@@ -51,8 +51,6 @@ def lexerAritmeticoBeginning(txt):
     global counter
     global tok
 
-    #tok += "<li>"
-
     for index, character in enumerate(txt): #Enumerate() se usa para poder tener el indice y el caracter
         counter += 1
 
@@ -61,7 +59,10 @@ def lexerAritmeticoBeginning(txt):
             #Checa comentarios
             if character == "/" and txt[index+1] == "/": #Si detecta un comentario, deja de analizar el resto
                 tokenTable.append(['', '//','Comentario',counter])
+                #HTML para englobar expresiones en div
+                tok += '<div>'
                 tok+='<p class = "comentario">' + "//" + '</p>'
+                tok += '</div>'
                 break
 
             #Checa espacios
@@ -91,9 +92,13 @@ def lexerAritmeticoBeginning(txt):
                 if character == '=': #Si no es letra, numero o _, pero es =, lo agrega y termina el análisis
                     varConcat = txt[varBegMark:varEndMark+1] #Hace el subtring de la variable sola (sin espacios)
                     tokenTable.append(['', varConcat, 'Variable', counter])
+                    tok += '<div>'
                     tok+='<p class = "variable">' + varConcat + "</p>"
+                    tok += '</div>'
                     tokenTable.append(['', character, 'Asignación',counter]) #Agrega la asignacion
+                    tok += '<div>'
                     tok+='<p class = "asignacion">' + character + "</p>"
+                    tok += '</div>'
                 else:
                     tokenTable.append(['', character, 'Error, caracter no valido para variable', counter])
 
@@ -134,7 +139,9 @@ def lexerAritmeticoEnd(txt):
             if index < len(txt)-1:
                 if character == "/" and txt[index+1] == "/": #Si detecta un comentario, deja de analizar el resto
                     tokenTable.append(['', '//','Comentario',counter])
+                    tok += '<div>'
                     tok+='<p class = "comentario">' + character + "</p>"
+                    tok += '</div>'
                     break
 
             #Analisis de siguiente del parentesis
@@ -163,19 +170,29 @@ def lexerAritmeticoEnd(txt):
                     afterOp = True
                     if character == '+':
                         tokenTable.append(['',character, 'Suma', counter])
+                        tok += '<div>'
                         tok+='<p class = "operador">' + character + "</p>"
+                        tok += '</div>'
                     if character == '-' and numHasExp == False and checkingNum == False:
                         tokenTable.append(['',character, 'Resta', counter])
+                        tok += '<div>'
                         tok+='<p class = "operador">' + character + "</p>"
+                        tok += '</div>'
                     if character == '/':
                         tokenTable.append(['',character, 'División', counter])
+                        tok += '<div>'
                         tok+='<p class = "operador">' + character + "</p>"
+                        tok += '</div>'
                     if character == '*':
                         tokenTable.append(['',character, 'Multiplicación', counter])
+                        tok += '<div>'
                         tok+='<p class = "operador">' + character + "</p>"
+                        tok += '</div>'
                     if character == '^':
                         tokenTable.append(['',character, 'Potencia', counter])
+                        tok += '<div>'
                         tok+='<p class = "operador">' + character + "</p>"
+                        tok += '</div>'
                 elif (character == "+" or character == "-" or character == "*" or character == "/" or character == "^") and afterOp == True:
                     tokenTable.append(['',character, 'Error, operadores consecutivos', counter])
                     break
@@ -190,12 +207,16 @@ def lexerAritmeticoEnd(txt):
                 afterOp = False
                 parentesisAbreCounter += 1
                 tokenTable.append(['',character, 'Abre paréntesis', counter])
+                tok += '<div>'
                 tok+='<p class = "parentesis">' + character + "</p>"
+                tok += '</div>'
             elif character == ')':
                 afterOp = False
                 parentesisCierraCounter += 1
                 tokenTable.append(['',character, 'Cierra paréntesis', counter])
+                tok += '<div>'
                 tok+='<p class = "parentesis">' + character + "</p>"
+                tok += '</div>'
             
             #Analisis de variables
             if re.search("[a-zA-Z]", character) != None and checkingVar == False and checkingNum == False: #Si es una letra
@@ -287,7 +308,9 @@ def lexerAritmeticoEnd(txt):
                 if re.search("\d|[.]", character) != None and re.search("\d|[.]|E", txt[index+1]) == None: #Si el caracter actual es digito y el siguiente no
                     if numType == "Real":
                         tokenTable.append(['', str(txt[numBegMark:numEndMark+1]), 'Real', counter])
+                        tok += '<div>'
                         tok+='<p class = "real">' + str(txt[numBegMark:numEndMark+1]) + "</p>"
+                        tok += '</div>'
                         numBegMark = 0
                         numEndMark = 0
                         numType = ''
@@ -298,7 +321,9 @@ def lexerAritmeticoEnd(txt):
                         isNegative = False
                     elif numType == "Entero":
                         tokenTable.append(['', str(txt[numBegMark:numEndMark+1]), 'Entero', counter])
+                        tok += '<div>'
                         tok+='<p class = "entero">' + txt[numBegMark:numEndMark+1] + "</p>"
+                        tok += '</div>'
                         numBegMark = 0
                         numEndMark = 0
                         numType = ''
@@ -312,7 +337,9 @@ def lexerAritmeticoEnd(txt):
             if index < len(txt)-1 and checkingVar: #Si no estamos en el ultimo caracter
                 if re.search("\w", character) != None and re.search("\w", txt[index+1]) == None: #Si el caracter actual es variable y el siguiente no
                     tokenTable.append(['', txt[varBegMark:varEndMark+1], 'Variable', counter])
+                    tok += '<div>'
                     tok+='<p class = "variable">' + txt[varBegMark:varEndMark+1] + "</p>"
+                    tok += '</div>'
                     varBegMark = 0
                     varEndMark = 0
                     checkingVar = False
@@ -327,7 +354,6 @@ def lexerAritmeticoEnd(txt):
         if parentesisAbreCounter > parentesisCierraCounter: #Falta cerrar
             tokenTable.append(['','','Falta cerrar paréntesis', counter])
 
-    #tok += "</li>"
     print("Lexer end")
 
 #Abre el texto con los casos de prueba
@@ -350,8 +376,11 @@ for line in testsFile:
 
     #Agrega los resultados de la tabla del lexer a la tabla en general
     tokenTable.append([beginning+end,'','',counter])
+    #HTML para encasillar todo en el div class row
+    tok += '<div class="row">'
     lexerAritmeticoBeginning(beginning)
     lexerAritmeticoEnd(end)
+    tok += "</div>"
 
     print("______________________________________________________________________________________\n")
 
