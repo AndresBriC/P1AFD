@@ -47,6 +47,7 @@ def lexerAritmeticoBeginning(txt):
     varBegMark = 0 #Para concatenar la variable
     varEndMark = 0 #Para concatenar la variable
     varConcat = "" #Almacena la variable concatenada
+    hasError = False #Para indicar que no lea despues del =
     global tokenTable
     global counter
     global tok
@@ -71,6 +72,11 @@ def lexerAritmeticoBeginning(txt):
             elif character == " " and begSpace == True and varSpace == False and (txt[index+1] != " " or txt[index+1] != "="):
                 tokenTable.append(['', character, 'Error, espacio dentro de la variable o variable sin asignación', counter])
                 varSpace = True
+                tok += '<div>'
+                tok+='<p class = "Error">' + character + "</p>"
+                tok += '</div>'
+                hasError = True
+                break
 
 
         if character == " " and begSpace == False: #Ignora los espacios del principio
@@ -82,6 +88,11 @@ def lexerAritmeticoBeginning(txt):
                 varEndMark = index
             else: #Si no es letra, manda error y deja de leer la string
                 tokenTable.append(['', character, 'Error, primer caracter diferente a una letra', counter])
+                tok += '<div>'
+                tok+='<p class = "Error">' + character + "</p>"
+                tok += '</div>'
+                hasError = True
+                break
         elif character != " " and begSpace == True:
             if re.search("\w", character) != None: #Si es una letra, numero o _
                 if varBegMark == varEndMark:
@@ -101,6 +112,13 @@ def lexerAritmeticoBeginning(txt):
                     tok += '</div>'
                 else:
                     tokenTable.append(['', character, 'Error, caracter no valido para variable', counter])
+                    tok += '<div>'
+                    tok+='<p class = "Error">' + character + "</p>"
+                    tok += '</div>'
+                    hasError = True
+                    break
+    
+    return hasError
 
 
 
@@ -378,8 +396,9 @@ for line in testsFile:
     tokenTable.append([beginning+end,'','',counter])
     #HTML para encasillar todo en el div class row
     tok += '<div class="row">'
-    lexerAritmeticoBeginning(beginning)
-    lexerAritmeticoEnd(end)
+    
+    if lexerAritmeticoBeginning(beginning) == False: #Si no regresa que tiene error en la primera parte
+        lexerAritmeticoEnd(end)
     tok += "</div>"
 
     print("______________________________________________________________________________________\n")
