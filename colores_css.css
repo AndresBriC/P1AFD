@@ -53,6 +53,7 @@
   }
   
 .row > div {
-    width: 30px;
+    width: 30px auto;
+    margin:0px auto;
     display: inline-block;
   }
