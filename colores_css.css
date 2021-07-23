@@ -7,7 +7,7 @@
 .variable
 {
    
-    color:cyan;
+    color:rgb(5, 161, 161);
 
 }
 .operador
@@ -25,7 +25,7 @@
 .real
 {
    
-    color: yellow;
+    color: rgb(194, 194, 39);
 
 }
 .asignacion

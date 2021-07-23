@@ -61,7 +61,7 @@ def lexerAritmeticoBeginning(txt):
                 tokenTable.append(['', '//','Comentario',counter])
                 #HTML para englobar expresiones en div
                 tok += '<div>'
-                tok+='<p class = "comentario">' + "//" + '</p>'
+                tok+='<p class = "comentario">' + str(txt[index:len(txt)-1]) + '</p>'
                 tok += '</div>'
                 break
 
@@ -140,7 +140,7 @@ def lexerAritmeticoEnd(txt):
                 if character == "/" and txt[index+1] == "/": #Si detecta un comentario, deja de analizar el resto
                     tokenTable.append(['', '//','Comentario',counter])
                     tok += '<div>'
-                    tok+='<p class = "comentario">' + character + "</p>"
+                    tok+='<p class = "comentario">' + str(txt[index:len(txt)-1]) + "</p>"
                     tok += '</div>'
                     break
 
