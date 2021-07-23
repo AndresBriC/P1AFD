@@ -2,9 +2,14 @@
 
 import re
 import csv
+import html
 
 tokenTable = [] #Contiene la tabla con los caracteres y tipos
+tok = ""
 counter = 0
+
+#Para linkear HTML al CSS
+tok += '<head> <link rel="stylesheet" type="text/css" href="colores_css.css"> </head>'
 
 #Separa el texto a partir del = y elimina los espacios de la expresion
 def stringSplitter(txt):
@@ -44,19 +49,29 @@ def lexerAritmeticoBeginning(txt):
     varConcat = "" #Almacena la variable concatenada
     global tokenTable
     global counter
+    global tok
+
+    #tok += "<li>"
 
     for index, character in enumerate(txt): #Enumerate() se usa para poder tener el indice y el caracter
         counter += 1
 
-        #Checa si hay un operador de asignacion
-        if index == len(txt)-1 and character == "=": #Si el ultimo caracter es un =
-            tokenTable.append(['', character, 'Asignación',counter])
-        elif index == len(txt)-1 and character != "=": #Si el ultimo caracter no es un =
-            print("No hay operador de Asignación")
-        elif index != len(txt)-1 and character == "/" and txt[index+1] == "/": #Si detecta un comentario, deja de analizar el resto
-            tokenTable.append(['', '//','Comentario',counter])
-            break
-        
+        #Para caracteres antes del ultimo
+        if index < len(txt)-1:
+            #Checa comentarios
+            if character == "/" and txt[index+1] == "/": #Si detecta un comentario, deja de analizar el resto
+                tokenTable.append(['', '//','Comentario',counter])
+                tok+='<p class = "comentario">' + "//" + '</p>'
+                break
+
+            #Checa espacios
+            if character == " " and begSpace == True and (txt[index+1] == " " or txt[index+1] == "="): #Si el actual es espacio y el sig. es espacio o igual
+                continue
+            elif character == " " and begSpace == True and varSpace == False and (txt[index+1] != " " or txt[index+1] != "="):
+                tokenTable.append(['', character, 'Error, espacio dentro de la variable o variable sin asignación', counter])
+                varSpace = True
+
+
         if character == " " and begSpace == False: #Ignora los espacios del principio
             continue
         elif character != " " and begSpace == False: #Aqui se encuentra algo despues de los espacios del principio, solo puede ser letra
@@ -67,28 +82,21 @@ def lexerAritmeticoBeginning(txt):
             else: #Si no es letra, manda error y deja de leer la string
                 tokenTable.append(['', character, 'Error, primer caracter diferente a una letra', counter])
         elif character != " " and begSpace == True:
-            
             if re.search("\w", character) != None: #Si es una letra, numero o _
                 if varBegMark == varEndMark:
                     varEndMark = index
                 else:
                     varEndMark = index #Marca el posible final de la concatenacion
             else: #Si no es letra, manda error y deja de leer la string
-                if character == '=': #Si no es letra, numero o _, pero es =, lo ignora
-                    continue
+                if character == '=': #Si no es letra, numero o _, pero es =, lo agrega y termina el análisis
+                    varConcat = txt[varBegMark:varEndMark+1] #Hace el subtring de la variable sola (sin espacios)
+                    tokenTable.append(['', varConcat, 'Variable', counter])
+                    tok+='<p class = "variable">' + varConcat + "</p>"
+                    tokenTable.append(['', character, 'Asignación',counter]) #Agrega la asignacion
+                    tok+='<p class = "asignacion">' + character + "</p>"
                 else:
                     tokenTable.append(['', character, 'Error, caracter no valido para variable', counter])
 
-        #Checa espacios
-        if index != len(txt)-1: #Para caracteres antes del ultimo
-            if character == " " and begSpace == True and (txt[index+1] == " " or txt[index+1] == "="): #Si el actual es espacio y el sig. es espacio o igual
-                continue
-            elif character == " " and begSpace == True and varSpace == False and (txt[index+1] != " " or txt[index+1] != "="):
-                tokenTable.append(['', character, 'Error, espacio dentro de la variable o variable sin asignación', counter])
-                varSpace = True
-    
-    varConcat = txt[varBegMark:varEndMark+1] #Hace el subtring de la variable sola (sin espacios)
-    tokenTable.append(['', varConcat, 'Variable', counter])
 
 
 def lexerAritmeticoEnd(txt):
@@ -108,6 +116,7 @@ def lexerAritmeticoEnd(txt):
     isNegative = False
     global tokenTable
     global counter
+    global tok
 
     if len(txt) == 0: #Si le pasan "end" vacio
         tokenTable.append(['','','Error, no hay operador de asignacion', counter])
@@ -125,6 +134,7 @@ def lexerAritmeticoEnd(txt):
             if index < len(txt)-1:
                 if character == "/" and txt[index+1] == "/": #Si detecta un comentario, deja de analizar el resto
                     tokenTable.append(['', '//','Comentario',counter])
+                    tok+='<p class = "comentario">' + character + "</p>"
                     break
 
             #Analisis de siguiente del parentesis
@@ -153,14 +163,19 @@ def lexerAritmeticoEnd(txt):
                     afterOp = True
                     if character == '+':
                         tokenTable.append(['',character, 'Suma', counter])
+                        tok+='<p class = "operador">' + character + "</p>"
                     if character == '-' and numHasExp == False and checkingNum == False:
                         tokenTable.append(['',character, 'Resta', counter])
+                        tok+='<p class = "operador">' + character + "</p>"
                     if character == '/':
                         tokenTable.append(['',character, 'División', counter])
+                        tok+='<p class = "operador">' + character + "</p>"
                     if character == '*':
                         tokenTable.append(['',character, 'Multiplicación', counter])
+                        tok+='<p class = "operador">' + character + "</p>"
                     if character == '^':
                         tokenTable.append(['',character, 'Potencia', counter])
+                        tok+='<p class = "operador">' + character + "</p>"
                 elif (character == "+" or character == "-" or character == "*" or character == "/" or character == "^") and afterOp == True:
                     tokenTable.append(['',character, 'Error, operadores consecutivos', counter])
                     break
@@ -175,10 +190,12 @@ def lexerAritmeticoEnd(txt):
                 afterOp = False
                 parentesisAbreCounter += 1
                 tokenTable.append(['',character, 'Abre paréntesis', counter])
+                tok+='<p class = "parentesis">' + character + "</p>"
             elif character == ')':
                 afterOp = False
                 parentesisCierraCounter += 1
                 tokenTable.append(['',character, 'Cierra paréntesis', counter])
+                tok+='<p class = "parentesis">' + character + "</p>"
             
             #Analisis de variables
             if re.search("[a-zA-Z]", character) != None and checkingVar == False and checkingNum == False: #Si es una letra
@@ -269,7 +286,8 @@ def lexerAritmeticoEnd(txt):
             if index < len(txt)-1 and checkingNum: #Si no estamos en el ultimo caracter
                 if re.search("\d|[.]", character) != None and re.search("\d|[.]|E", txt[index+1]) == None: #Si el caracter actual es digito y el siguiente no
                     if numType == "Real":
-                        tokenTable.append(['', txt[numBegMark:numEndMark+1], 'Real', counter])
+                        tokenTable.append(['', str(txt[numBegMark:numEndMark+1]), 'Real', counter])
+                        tok+='<p class = "real">' + str(txt[numBegMark:numEndMark+1]) + "</p>"
                         numBegMark = 0
                         numEndMark = 0
                         numType = ''
@@ -279,7 +297,8 @@ def lexerAritmeticoEnd(txt):
                         afterOp = False
                         isNegative = False
                     elif numType == "Entero":
-                        tokenTable.append(['', txt[numBegMark:numEndMark+1], 'Entero', counter])
+                        tokenTable.append(['', str(txt[numBegMark:numEndMark+1]), 'Entero', counter])
+                        tok+='<p class = "entero">' + txt[numBegMark:numEndMark+1] + "</p>"
                         numBegMark = 0
                         numEndMark = 0
                         numType = ''
@@ -293,6 +312,7 @@ def lexerAritmeticoEnd(txt):
             if index < len(txt)-1 and checkingVar: #Si no estamos en el ultimo caracter
                 if re.search("\w", character) != None and re.search("\w", txt[index+1]) == None: #Si el caracter actual es variable y el siguiente no
                     tokenTable.append(['', txt[varBegMark:varEndMark+1], 'Variable', counter])
+                    tok+='<p class = "variable">' + txt[varBegMark:varEndMark+1] + "</p>"
                     varBegMark = 0
                     varEndMark = 0
                     checkingVar = False
@@ -307,7 +327,7 @@ def lexerAritmeticoEnd(txt):
         if parentesisAbreCounter > parentesisCierraCounter: #Falta cerrar
             tokenTable.append(['','','Falta cerrar paréntesis', counter])
 
-
+    #tok += "</li>"
     print("Lexer end")
 
 #Abre el texto con los casos de prueba
@@ -343,11 +363,7 @@ with open('tokenTable.csv', 'w', encoding='UTF8', newline='') as f:
     writer.writerow(["Expresión","Token","Type","Index"])
     writer.writerows(tokenTable)
 
-
-"""
-To do
-Enteros
-Reales
-Negativos
-Operadores incl. potencia
-"""
+#Escribe al archivo HTML
+f = open('colores.html','w') # w if you want to write override or a if you want to write and append
+f.write(tok)
+f.close()  

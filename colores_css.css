@@ -1,0 +1,54 @@
+.entero
+{
+   
+    color: blue;
+
+}
+.variable
+{
+   
+    color:cyan;
+
+}
+.operador
+{
+   
+    color: rgb(106, 17, 17);
+
+}
+.comentario
+{
+   
+    color:green;
+
+}
+.real
+{
+   
+    color: yellow;
+
+}
+.asignacion
+{
+   
+    color: rgb(146, 13, 84);
+
+}
+.parentesis
+{
+   
+    color:purple;
+
+}
+
+.Error
+{
+   
+    color:red;
+
+}
+
+
+
+
+
